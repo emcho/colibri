@@ -72,7 +72,7 @@
     </di>
     <di>
       <dt>RTP Translation</dt>
-      <dd><cite>RFC 3550</cite> defines translators as "intermediate system that forwards RTP packets with their synchronization source identifier intact." This specification respects that definition but it also uses "RTP Translation" in opposition with "Content Mixing". Conference bridges that perform RTP translation simply redirect each incoming RTP packet to all participants, often excluding the one where it came from. Contrary to content mixing, rtp translation generally requires less processing resources since it does not involve media manipulation. Bandwidth requirements on the other hand, could be significantly higher with  RTP translation than with content mixing.</dd>
+      <dd><cite>RFC 3550</cite> defines a translator as "an intermediate system that forwards RTP packets with their synchronization source identifier intact." This specification respects that definition but it also uses "RTP Translation" in opposition with "Content Mixing". Conference bridges that perform RTP translation simply redirect each incoming RTP packet to all participants, often excluding the one where it came from. Contrary to content mixing, rtp translation generally requires less processing resources since it does not involve media manipulation. Bandwidth requirements on the other hand, could be significantly higher with  RTP translation than with content mixing.</dd>
     </di>
   </dl>
 </section1>
@@ -234,24 +234,24 @@ ZRTP
 
 
   <section1 topic='Determining Support' anchor='support'>
-    <p>If an entity supports Coin, it SHOULD advertise that fact by returning
-    a feature of "urn:xmpp:coin" in response to a &xep0030;
+    <p>If an entity supports COLIBRI, it SHOULD advertise that fact by returning
+    a feature of "http://jitsi.org/protocol/colibri" in response to a &xep0030;
     information request.</p>
     <example caption="Service Discovery Information Request"><![CDATA[
 <iq from='kingclaudius@shakespeare.lit/castle'
     id='ku6e51v3'
-    to='laertes@shakespeare.lit/castle'
+    to='belfry.shakespeare.lit'
     type='get'>
   <query xmlns='http://jabber.org/protocol/disco#info'/>
 </iq>
     ]]></example>
     <example caption="Service Discovery Information Response"><![CDATA[
-<iq from='laertes@shakespeare.lit/castle'
+<iq from='belfry.shakespeare.lit'
     id='ku6e51v3'
     to='kingclaudius@shakespeare.lit/castle'
     type='result'>
   <query xmlns='http://jabber.org/protocol/disco#info'>
-    <feature var='urn:xmpp:coin'/>
+    <feature var='http://jitsi.org/protocol/colibri'/>
   </query>
 </iq>
     ]]></example>

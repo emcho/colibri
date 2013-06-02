@@ -60,7 +60,7 @@
   <dl>
     <di>
       <dt>Focus or Focus Agent</dt>
-      <dd>The terms apply to XMPP agents that, in terms of signalling, stand at the center of a tightly-coupled conference call. In other words, all conference participants establish a &xep0166 session with and only with that agent. Focus Agents are not necessarily performing media mixing themselves. In fact, the very purpose of this specification is to provide them with a means of handling this elsewhere.</dd>
+      <dd>The terms apply to XMPP agents that, in terms of signalling, stand at the center of a tightly-coupled conference call. In other words, all conference participants establish a &xep0166; session with and only with that agent. Focus Agents are not necessarily performing media mixing themselves. In fact, the very purpose of this specification is to provide them with a means of handling this elsewhere.</dd>
     </di>
     <di>
       <dt>Mixer or Bridge</dt>

@@ -53,7 +53,7 @@
 
     <p>The situation is quite different for video calls. Media decoding and especially encoding require considerably more resources with video than they do with audio. Today, encoding a single video flow with an acceptable quality is often the maximum that can be expected from an end-user device. The advantages that come with Moore's law will likely be insufficient to improve this, given the massive shift toward mobile devices and the ever-increasing user expectations toward video quality.</p>
 
-    <p>Therefore, this specification (Cobri) aims to provide a means for user agents to interact with conference mixers. Such interaction allows user agents to allocate mixing channels, indicate what conferences they should be attached to, what integers the various payload types map to, etc. Using Cobri would hence allow any user agent to organize conference calls and act as a signalling focus by outsourcing the actual media mixing to a dedicated mixer.</p>
+    <p>Therefore, this specification (COLIBRI) aims to provide a means for user agents to interact with conference mixers. Such interaction allows user agents to allocate mixing channels, indicate what conferences they should be attached to, what integers the various payload types map to, etc. Using COLIBRI would hence allow any user agent to organize conference calls and act as a signalling focus by outsourcing the actual media mixing to a dedicated mixer.</p>
 
   </section1>
   <section1 topic='Terminology' anchor='terms'>
@@ -80,13 +80,13 @@
     <p>The extension defined herein is designed to meet the following requirements:</p>
     <ol>
       <li>Provide a means for conference focus agents to interact with conference mixers in order to configure payload type mappings and allocate ports or other resources that they could then advertise in Jingle sessions so that all media would traverse the bridge.</li>
-      <li>Impose no Cobri specific requirements on non-focus participants so that any Jingle supporting client would be able to participate.</li>
+      <li>Impose no COLIBRI specific requirements on non-focus participants so that any Jingle supporting client would be able to participate.</li>
       <li>[TODO] Anything else?</li>
     </ol>
   </section1>
   <section1 topic='How It Works' anchor='howitworks'>
-    <p>This section provides a friendly introduction to Cobri.</p>
-    <p>In essence, the goal of Cobri is to provide focus agents with a way of using remote mixers as if as they were available locally. The most important part of that is the possibility to allocate ports on the mixer interfaces and then use these ports when establishing Jingle sessions with the various participants. </p>
+    <p>This section provides a friendly introduction to COLIBRI.</p>
+    <p>In essence, the goal of COLIBRI is to provide focus agents with a way of using remote mixers as if as they were available locally. The most important part of that is the possibility to allocate ports on the mixer interfaces and then use these ports when establishing Jingle sessions with the various participants. </p>
 
 
     <p>Once in a call, call members and mixers can use Coin to exchange

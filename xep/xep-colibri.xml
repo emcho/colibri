@@ -19,7 +19,7 @@
     </dependencies>
     <supersedes />
     <supersededby />
-    <shortname>coin</shortname>
+    <shortname>colibri</shortname>
     <author>
       <firstname>Emil</firstname>
       <surname>Ivov</surname>
@@ -42,6 +42,14 @@
       <initials>ei/lm</initials>
       <remark>
         <p>First draft.</p>
+      </remark>
+    </revision>
+    <revision>
+      <version>0.0.2</version>
+      <date>2013-12-03</date>
+      <initials>ph</initials>
+      <remark>
+        <p>Added usecases.</p>
       </remark>
     </revision>
   </header>
@@ -88,12 +96,7 @@
   <section1 topic='How It Works' anchor='howitworks'>
     <p>This section provides a friendly introduction to COLIBRI.</p>
     <p>In essence, the goal of COLIBRI is to provide focus agents with a way of using remote mixers as if as they were available locally. The most important part of that is the possibility to allocate ports on the mixer interfaces and then use these ports when establishing Jingle sessions with the various participants. </p>
-
-
-    <p>Once in a call, call members and mixers can use Coin to exchange
-    <cite>RFC 4575</cite> conference information indicating what participants
-    are currently on the call and what their status is.
-    
+<!--
 discovery
 creating a conference call
 modifying a conference call
@@ -106,8 +109,7 @@ RAW UDP
 ICE UDP
 ZRTP
       composited / switched
-    
-    </p>
+-->
   </section1>
   <section1 topic='Use cases' anchor='usecases'>
     <section2 topic='Creating a conference' anchor='usecases-create'>
@@ -122,12 +124,11 @@ SEND: <iq from='romeo@montague.lit/orchard'
               [optional payload and transport description]
             </channel>
             <channel initiator='true'/>
+            ...
+            <channel initiator='true'/>
           </content>
           <content name='video'>
-            <channel initiator='true'>
-              [optional payload and transport description]
-            </channel>
-            <channel initiator='true'/
+            ...
           </content>
         </conference>  
       </iq>
@@ -139,36 +140,19 @@ RECV: <iq type='result' to='romeo@montague.lit/orchard' from='garden.montague.li
           <content name='audio'>
             <channel rtp-level-relay-type='mixer' direction='recvonly' initiator='true' id='c6a142b7cf728fd0' expire='60'>
               <source xmlns='urn:xmpp:jingle:apps:rtp:ssma:0' ssrc='3716204482'/>
-              <transport xmlns='urn:xmpp:jingle:transports:ice-udp:1' pwd='5d0mja27fgl83r9tsl1b9gkk4f' ufrag='amiqp'>
-                <fingerprint xmlns='urn:xmpp:jingle:apps:dtls:0' hash='sha-1'>99:E0:34:9B:6E:34:64:FD:42:F9:8D:FD:5F:EA:EE:26:D9:23:1B:F6</fingerprint>
-                <candidate type='host' protocol='udp' id='cafb6f2c8197818e72f69182c6a142b7cf728fd019cb28c5074ea4cd9' ip='176.31.40.80' component='1' port='5144' foundation='3' generation='0' priority='2113932031' network='0'/>
-                <candidate type='host' protocol='udp' id='cafb6f2c8197818e72f69182c6a142b7cf728fd019cb28c502db36e6f' ip='176.31.40.80' component='2' port='5145' foundation='3' generation='0' priority='2113932030' network='0'/>
+              <transport xmlns='urn:xmpp:jingle:transports:ice-udp:1' pwd='5d0mj' ufrag='amiq'>
+                <fingerprint xmlns='urn:xmpp:jingle:apps:dtls:0' hash='sha-1'>99:...:F6</fingerprint>
+                <candidate type='host' protocol='udp' id='ca' ip='176.31.40.80' component='1' port='5144' foundation='3' generation='0' priority='2113932031' network='0'/>
+                <candidate type='host' protocol='udp' id='ga' ip='176.31.40.80' component='2' port='5145' foundation='3' generation='0' priority='2113932030' network='0'/>
               </transport>
             </channel>
-            <channel rtp-level-relay-type='mixer' direction='recvonly' initiator='true' id='f2b32e1ed48d74d4' expire='60'>
-              <source xmlns='urn:xmpp:jingle:apps:rtp:ssma:0' ssrc='778868232'/>
-              <transport xmlns='urn:xmpp:jingle:transports:ice-udp:1' pwd='7kg3ur8k3r270v554ajkkj2d0e' ufrag='43hh7'>
-                <fingerprint xmlns='urn:xmpp:jingle:apps:dtls:0' hash='sha-1'>65:BC:07:C9:67:7A:F2:CF:C2:92:30:D1:B8:98:5A:C2:C1:76:6E:6D</fingerprint>
-                <candidate type='host' protocol='udp' id='cafb6f2c8197818e72f69182f2b32e1ed48d74d41971d4070502c500d' ip='176.31.40.80' component='1' port='5146' foundation='3' generation='0' priority='2113932031' network='0'/>
-                <candidate type='host' protocol='udp' id='cafb6f2c8197818e72f69182f2b32e1ed48d74d41971d40701137dead' ip='176.31.40.80' component='2' port='5147' foundation='3' generation='0' priority='2113932030' network='0'/>
-              </transport>
-            </channel>
+            ...
           </content>
           <content name='video'>
-            <channel rtp-level-relay-type='translator' initiator='true' id='c9726594ccb4ede7' expire='60'>
-              <transport xmlns='urn:xmpp:jingle:transports:ice-udp:1' pwd='57vomr1ckf3uen44m7a2lb8qjm' ufrag='44cev'>
-                <fingerprint xmlns='urn:xmpp:jingle:apps:dtls:0' hash='sha-1'>C6:F3:98:43:5A:3D:02:62:F8:68:F5:21:5F:42:E0:E8:CC:FE:71:CC</fingerprint>
-                <candidate type='host' protocol='udp' id='cafb6f2c8197818e2ab80ce5c9726594ccb4ede71956a44c0364dabbb' ip='176.31.40.80' component='1' port='5148' foundation='3' generation='0' priority='2113932031' network='0'/>
-                <candidate type='host' protocol='udp' id='cafb6f2c8197818e2ab80ce5c9726594ccb4ede71956a44c042ed62af' ip='176.31.40.80' component='2' port='5149' foundation='3' generation='0' priority='2113932030' network='0'/>
-              </transport>
+            <channel rtp-level-relay-type='mixer' direction='recvonly' initiator='true' id='c9726594ccb4ede7' expire='60'>
+              ...
             </channel>
-            <channel rtp-level-relay-type='translator' initiator='true' id='793f95d383b8f01' expire='60'>
-              <transport xmlns='urn:xmpp:jingle:transports:ice-udp:1' pwd='5sru9g08hs17gfedd12npgm7pk' ufrag='tfa4'>
-                <fingerprint xmlns='urn:xmpp:jingle:apps:dtls:0' hash='sha-1'>F7:28:66:C5:A5:13:CE:E6:29:84:6B:22:36:47:02:50:7E:B3:AB:DB</fingerprint>
-                <candidate type='host' protocol='udp' id='cafb6f2c8197818e2ab80ce5793f95d383b8f017ac41a30066e5b079' ip='176.31.40.80' component='1' port='5150' foundation='3' generation='0' priority='2113932031' network='0'/>
-                <candidate type='host' protocol='udp' id='cafb6f2c8197818e2ab80ce5793f95d383b8f017ac41a3005f82ce41' ip='176.31.40.80' component='2' port='5151' foundation='3' generation='0' priority='2113932030' network='0'/>
-              </transport>
-            </channel>
+            ...
           </content>
         </conference>
       </iq>
@@ -188,16 +172,10 @@ SEND: <iq to='garden.montague.lit' from='romeo@montague.lit/orchard' type='set' 
           <content name='audio'>
             <channel id='c6a142b7cf728fd0' initiator='true'>
               <payload-type id='111' name='opus' clockrate='48000' channels='2'/>
-              <payload-type id='103' name='ISAC' clockrate='16000' channels='1'/>
-              <payload-type id='104' name='ISAC' clockrate='32000' channels='1'/>
               <payload-type id='0' name='PCMU' clockrate='8000' channels='1'/>
               <payload-type id='8' name='PCMA' clockrate='8000' channels='1'/>
-              <payload-type id='106' name='CN' clockrate='32000' channels='1'/>
-              <payload-type id='105' name='CN' clockrate='16000' channels='1'/>
-              <payload-type id='13' name='CN' clockrate='8000' channels='1'/>
-              <payload-type id='126' name='telephone-event' clockrate='8000' channels='1'/>
               <transport xmlns='urn:xmpp:jingle:transports:ice-udp:1' ufrag='WP+qAQZGnDhhM+87' pwd='0Uxdzy9gTryxAkmAx2LD1TYR'>
-                <fingerprint hash='sha-256' xmlns='urn:xmpp:jingle:apps:dtls:0' setup='active'>08:80:E9:2E:8B:EB:BF:F4:2F:3F:23:21:27:36:04:F9:BC:54:65:FA:D2:76:09:23:DF:2B:B0:25:08:79:D1:C7</fingerprint>
+                <fingerprint hash='sha-256' xmlns='urn:xmpp:jingle:apps:dtls:0' setup='active'>08:...:C7</fingerprint>
               </transport>
             </channel>
           </content>
@@ -207,7 +185,7 @@ SEND: <iq to='garden.montague.lit' from='romeo@montague.lit/orchard' type='set' 
               <payload-type id='116' name='red' clockrate='90000' channels='1'/>
               <payload-type id='117' name='ulpfec' clockrate='90000' channels='1'/>
               <transport xmlns='urn:xmpp:jingle:transports:ice-udp:1' ufrag='hpx55NAN46sNYwF+' pwd='hkg/YRpjXZx4qDG3KbzB3qr1'>
-                <fingerprint hash='sha-256' xmlns='urn:xmpp:jingle:apps:dtls:0' setup='active'>08:80:E9:2E:8B:EB:BF:F4:2F:3F:23:21:27:36:04:F9:BC:54:65:FA:D2:76:09:23:DF:2B:B0:25:08:79:D1:C7</fingerprint>
+                <fingerprint hash='sha-256' xmlns='urn:xmpp:jingle:apps:dtls:0' setup='active'>08:...:C7</fingerprint>
               </transport>
             </channel>
           </content>
@@ -219,10 +197,10 @@ RECV: <iq type='result' to='romeo@montague.lit/orchard' from='garden.montague.li
         <conference xmlns='http://jitsi.org/protocol/colibri' id='cafb6f2c8197818e'>
           <content name='audio'>
             <channel rtp-level-relay-type='mixer' direction='recvonly' initiator='true' id='c6a142b7cf728fd0' expire='60'>
-              <transport xmlns='urn:xmpp:jingle:transports:ice-udp:1' pwd='5d0mja27fgl83r9tsl1b9gkk4f' ufrag='amiqp'>
+              <transport xmlns='urn:xmpp:jingle:transports:ice-udp:1' pwd='5d0mj' ufrag='amiq'>
                 <fingerprint xmlns='urn:xmpp:jingle:apps:dtls:0' hash='sha-1'>99:E0:34:9B:6E:34:64:FD:42:F9:8D:FD:5F:EA:EE:26:D9:23:1B:F6</fingerprint>
-                <candidate type='host' protocol='udp' id='cafb6f2c8197818e72f69182c6a142b7cf728fd019cb28c5074ea4cd9' ip='176.31.40.80' component='1' port='5144' foundation='3' generation='0' priority='2113932031' network='0'/>
-                <candidate type='host' protocol='udp' id='cafb6f2c8197818e72f69182c6a142b7cf728fd019cb28c502db36e6f' ip='176.31.40.80' component='2' port='5145' foundation='3' generation='0' priority='2113932030' network='0'/>
+                <candidate type='host' protocol='udp' id='ca' ip='176.31.40.80' component='1' port='5144' foundation='3' generation='0' priority='2113932031' network='0'/>
+                <candidate type='host' protocol='udp' id='ga' ip='176.31.40.80' component='2' port='5145' foundation='3' generation='0' priority='2113932030' network='0'/>
               </transport>
             </channel>
             <channel rtp-level-relay-type='mixer' direction='recvonly' initiator='true' id='f2b32e1ed48d74d4' expire='60'>
@@ -251,7 +229,6 @@ RECV: <iq type='result' to='romeo@montague.lit/orchard' from='garden.montague.li
           </content>
         </conference>
       </iq>
-FIXME
 ]]></example>
     </section2>
     <section2 topic='Updating transport information for a channel' anchor='usecases-update-transport'>
@@ -330,131 +307,6 @@ RECV: <iq type='result' to='romeo@montague.lit/orchard' from='garden.montague.li
   <section1 topic='Use with Jingle'>
     <p>FIXME: Non-normative section showing how to use this with Jingle.</p>
   </section1>
-  <section1 topic='Creating a conference call' anchor='call-create'>
-    <p>When creating conference calls mixers SHOULD indicate the nature of the
-    call as early as possible. This is necessary in order to allow other
-    participating user agents to adapt their user interface in an appropriate
-    way.</p>
-
-    <code caption="A mixer sends session-initiate for a conference call">
-    <![CDATA[
-<iq from='romeo@montague.lit/orchard'
-    id='zid615d9'
-    to='juliet@capulet.lit/balcony'
-    type='set'>
-  <jingle xmlns='urn:xmpp:jingle:1'>
-          action='session-initiate'
-          initiator='romeo@montague.lit/orchard'
-          sid='a73sjjvkla37jfea'>
-    <content creator='initiator' name='this-is-a-stub'>
-      <description xmlns='urn:xmpp:jingle:apps:stub:0'/>
-      <transport xmlns='urn:xmpp:jingle:transports:stub:0'/>
-    </content>
-    <conference-info isfocus='true'/>
-  </jingle>
-</iq>
-    ]]></code>
-    <p>Similarly mixers being dialed by new participants SHOULD indicate the
-    nature of the call by including the &lt;conference-info/&gt; element into
-    the Jingle session-accept message.</p>
-    <p>Finally, when transforming an existing one-to-one session into a
-     conference or vice-versa a mixer SHOULD send a Jingle session-info message
-     with the appropriate &lt;conference-info/&gt; element. </p>
-    <p>Note that presence of the &lt;conference-info/&gt; element is only
-    determines whether the party sending it is currently acting as a mixer or
-    not. If multiple peers in a call are independently acting as mixers they
-    should all indicate their status accordingly.</p>
-  </section1>
-  <section1 topic='Delivering conference information' anchor='coin-delivery'>
-    <p>Once a conference call has been established and advertised as such, a
-    mixer MAY at any point send information describing the state of the call and
-    its current participants.</p>
-
-    <code caption="Mixer sends information about the current state of the call">
-    <![CDATA[
-<iq from='romeo@montague.lit/orchard'
-    id='zid615d9'
-    to='juliet@capulet.lit/balcony'
-    type='set'>
-    <conference-info xmlns="urn:ietf:params:xml:ns:conference-info"
-                     entity="xmpp:romeo@monague.lit/orchard"
-                     state="full"
-                     version="1">
-
-     <!-- CONFERENCE INFO -->
-     <conference-description>
-       <subject>Ending a relationship</subject>
-     </conference-description>
-
-     <!-- CONFERENCE STATE -->
-     <conference-state>
-       <user-count>3</user-count>
-     </conference-state>
-
-     <!-- USERS -->
-     <users>
-       <user entity="xmpp:romeo@montague.lit" state="full">
-         <display-text>Romeo</display-text>
-
-         <!-- ENDPOINTS -->
-         <endpoint entity="xmpp:romeo@montague.lit/orchard">
-           <display-text>Romeo's smartphone</display-text>
-           <status>disconnected</status>
-           <disconnection-info>
-             <when>2011-01-31T20:00:00Z</when>
-             <reason>poisoned</reason>
-           </disconnection-info>
-
-           <!-- MEDIA -->
-           <media id="1">
-             <display-text>main audio</display-text>
-             <type>audio</type>
-             <src-id>432424</src-id>
-           </media>
-         </endpoint>
-       </user>
-
-       <user entity="xmpp:juliet@capulet.lit" state="full">
-         <display-text>Juliet</display-text>
-
-         <!-- ENDPOINTS -->
-         <endpoint entity="juliet@capulet.lit/balcony">
-           <display-text>Juliet's netbook</display-text>
-           <status>connected</status>
-
-           <!-- MEDIA -->
-           <media id="1">
-             <type>audio</type>
-             <src-id>2124</src-id>
-           </media>
-         </endpoint>
-       </user>
-
-       <!-- USER -->
-       <user entity="sip:alice@example.com" state="full">
-         <display-text>Alice</display-text>
-
-         <!-- ENDPOINTS -->
-         <endpoint entity="sip:4kfk4j392jsu@example.com;grid=433kj4j3u">
-           <status>connected</status>
-
-           <!-- MEDIA -->
-           <media id="1">
-             <type>audio</type>
-             <src-id>534232</src-id>
-           </media>
-         </endpoint>
-       </user>
-     </users>
-   </conference-info>
-</iq>
-
-  ]]></code>
-
-
-  </section1>
-
-
   <section1 topic='Determining Support' anchor='support'>
     <p>If an entity supports COLIBRI, it SHOULD advertise that fact by returning
     a feature of "http://jitsi.org/protocol/colibri" in response to a &xep0030;
@@ -484,450 +336,13 @@ RECV: <iq type='result' to='romeo@montague.lit/orchard' from='garden.montague.li
     explicit service discovery instead.</p>
   </section1>
   <section1 topic='Security Considerations' anchor='security'>
-    <p>PENDING: <cite>RFC 4575</cite> mostly talks about authentication
-    conference-info subscriptions but these are not part of this specification.
-    The authors are hence currently unaware of any other Coin specific security
-    considerations</p>
+    <p>PENDING</p>
   </section1>
   <section1 topic='Open Issues' anchor='issues'>
-    <p>This document provides a basic description of a simple way to support
-    tightly coupled conference calls. It is in many respects still a stub and a
-    number of open issues require the attention of the community:</p>
-    <ol>
-      <li>Need to define best practices for user agents to easily determine
-      whether the request of user to establish a conference call should result
-      in a Muji or a Coin conference.</li>
-    </ol>
+    <p>PENDING</p>
   </section1>
   <section1 topic='XML Schemas' anchor='schema'>
-      <section2 topic='Advertising Conf Calls' anchor='schema-discover'>
-    <code><![CDATA[
-<?xml version='1.0' encoding='UTF-8'?>
-
-<xs:schema
-    xmlns:xs='http://www.w3.org/2001/XMLSchema'
-    targetNamespace='urn:xmpp:jingle:apps:coin:1'
-    xmlns='urn:xmpp:jingle:apps:coin:1'
-    elementFormDefault='qualified'>
-
-  <xs:annotation>
-    <xs:documentation>
-      The protocol documented by this schema is defined in
-      XEP-0XXX: http://www.xmpp.org/extensions/xep-0XXX.html
-    </xs:documentation>
-  </xs:annotation>
-
-  <xs:element name="conference-info" type="empty">
-    <xs:complexType>
-      <xs:attribute name='isfocus' type='xs:boolean' required='true'/>
-    </xs:complexType>
-  </xs:element>
-
-</xs:schema>
-    ]]></code>
-  </section2>
-  <section2 topic='Conference Info' anchor='schema-coin'>
-    <code><![CDATA[
-<?xml version="1.0" encoding="UTF-8" ?>
-   <xs:schema
-   targetNamespace="urn:ietf:params:xml:ns:conference-info"
-   xmlns:tns="urn:ietf:params:xml:ns:conference-info"
-   xmlns:xs="http://www.w3.org/2001/XMLSchema"
-   xmlns="urn:ietf:params:xml:ns:conference-info"
-   elementFormDefault="qualified"
-   attributeFormDefault="unqualified">
-
-   <xs:annotation>
-    <xs:documentation>
-      The protocol documented by this schema is defined in
-      RFC 4575: http://tools.ietf.org/html/rfc4575  and reused by
-      XEP XXXX http://www.xmpp.org/extensions/xep-XXXX.html
-    </xs:documentation>
-  </xs:annotation>
-
-   <!--
-     This imports the xml:language definition
-   -->
-      <xs:import namespace="http://www.w3.org/XML/1998/namespace"
-       schemaLocation="http://www.w3.org/2001/03/xml.xsd"/>
-   <!--
-     CONFERENCE ELEMENT
-   -->
-      <xs:element name="conference-info" type="conference-type"/>
-      <!--
-         CONFERENCE TYPE
-      -->
-      <xs:complexType name="conference-type">
-       <xs:sequence>
-        <xs:element name="conference-description"
-         type="conference-description-type" minOccurs="0"/>
-        <xs:element name="host-info"
-         type="host-type" minOccurs="0"/>
-        <xs:element name="conference-state"
-         type="conference-state-type" minOccurs="0"/>
-        <xs:element name="users"
-         type="users-type" minOccurs="0"/>
-        <xs:element name="sidebars-by-ref"
-         type="uris-type" minOccurs="0"/>
-        <xs:element name="sidebars-by-val"
-         type="sidebars-by-val-type" minOccurs="0"/>
-        <xs:any namespace="##other" processContents="lax"
-         minOccurs="0" maxOccurs="unbounded"/>
-       </xs:sequence>
-       <xs:attribute name="entity"
-        type="xs:anyURI" use="required"/>
-       <xs:attribute name="state"
-        type="state-type" use="optional" default="full"/>
-       <xs:attribute name="version"
-        type="xs:unsignedInt" use="optional"/>
-       <xs:anyAttribute namespace="##other" processContents="lax"/>
-      </xs:complexType>
-      <!--
-         STATE TYPE
-      -->
-      <xs:simpleType name="state-type">
-       <xs:restriction base="xs:string">
-        <xs:enumeration value="full"/>
-        <xs:enumeration value="partial"/>
-        <xs:enumeration value="deleted"/>
-       </xs:restriction>
-      </xs:simpleType>
-      <!--
-         CONFERENCE DESCRIPTION TYPE
-      -->
-      <xs:complexType name="conference-description-type">
-       <xs:sequence>
-        <xs:element name="display-text"
-         type="xs:string" minOccurs="0"/>
-        <xs:element name="subject"
-         type="xs:string" minOccurs="0"/>
-        <xs:element name="free-text"
-         type="xs:string" minOccurs="0"/>
-        <xs:element name="keywords"
-         type="keywords-type" minOccurs="0"/>
-        <xs:element name="conf-uris"
-         type="uris-type" minOccurs="0"/>
-        <xs:element name="service-uris"
-         type="uris-type" minOccurs="0"/>
-        <xs:element name="maximum-user-count"
-         type="xs:unsignedInt" minOccurs="0"/>
-        <xs:element name="available-media"
-         type="conference-media-type" minOccurs="0"/>
-        <xs:any namespace="##other" processContents="lax"
-         minOccurs="0" maxOccurs="unbounded"/>
-       </xs:sequence>
-       <xs:anyAttribute namespace="##other" processContents="lax"/>
-      </xs:complexType>
-      <!--
-         HOST TYPE
-      -->
-      <xs:complexType name="host-type">
-       <xs:sequence>
-        <xs:element name="display-text" type="xs:string"
-         minOccurs="0"/>
-        <xs:element name="web-page" type="xs:anyURI"
-         minOccurs="0"/>
-        <xs:element name="uris" type="uris-type"
-         minOccurs="0"/>
-        <xs:any namespace="##other" processContents="lax"
-         minOccurs="0" maxOccurs="unbounded"/>
-       </xs:sequence>
-       <xs:anyAttribute namespace="##other" processContents="lax"/>
-      </xs:complexType>
-      <!--
-         CONFERENCE STATE TYPE
-      -->
-      <xs:complexType name="conference-state-type">
-       <xs:sequence>
-        <xs:element name="user-count" type="xs:unsignedInt"
-         minOccurs="0"/>
-        <xs:element name="active" type="xs:boolean"
-         minOccurs="0"/>
-        <xs:element name="locked" type="xs:boolean"
-         minOccurs="0"/>
-        <xs:any namespace="##other" processContents="lax"
-         minOccurs="0" maxOccurs="unbounded"/>
-       </xs:sequence>
-       <xs:anyAttribute namespace="##other" processContents="lax"/>
-      </xs:complexType>
-      <!--
-         CONFERENCE MEDIA TYPE
-      -->
-      <xs:complexType name="conference-media-type">
-       <xs:sequence>
-        <xs:element name="entry" type="conference-medium-type"
-         maxOccurs="unbounded"/>
-       </xs:sequence>
-       <xs:anyAttribute namespace="##other" processContents="lax"/>
-      </xs:complexType>
-      <!--
-         CONFERENCE MEDIUM TYPE
-      -->
-      <xs:complexType name="conference-medium-type">
-       <xs:sequence>
-        <xs:element name="display-text" type="xs:string"
-         minOccurs="0"/>
-        <xs:element name="type" type="xs:string"/>
-        <xs:element name="status" type="media-status-type"
-         minOccurs="0"/>
-        <xs:any namespace="##other" processContents="lax"
-         minOccurs="0" maxOccurs="unbounded"/>
-       </xs:sequence>
-       <xs:attribute name="label" type="xs:string"
-        use="required"/>
-       <xs:anyAttribute namespace="##other" processContents="lax"/>
-      </xs:complexType>
-      <!--
-         URIs TYPE
-      -->
-      <xs:complexType name="uris-type">
-       <xs:sequence>
-        <xs:element name="entry" type="uri-type"
-         maxOccurs="unbounded"/>
-       </xs:sequence>
-       <xs:attribute name="state" type="state-type"
-        use="optional" default="full"/>
-       <xs:anyAttribute namespace="##other" processContents="lax"/>
-      </xs:complexType>
-      <!--
-         URI TYPE
-      -->
-      <xs:complexType name="uri-type">
-       <xs:sequence>
-        <xs:element name="uri" type="xs:anyURI"/>
-        <xs:element name="display-text" type="xs:string"
-         minOccurs="0"/>
-        <xs:element name="purpose" type="xs:string"
-         minOccurs="0"/>
-        <xs:element name="modified" type="execution-type"
-         minOccurs="0"/>
-        <xs:any namespace="##other" processContents="lax"
-         minOccurs="0" maxOccurs="unbounded"/>
-       </xs:sequence>
-       <xs:anyAttribute namespace="##other" processContents="lax"/>
-      </xs:complexType>
-      <!--
-         KEYWORDS TYPE
-      -->
-      <xs:simpleType name="keywords-type">
-       <xs:list itemType="xs:string"/>
-      </xs:simpleType>
-      <!--
-         USERS TYPE
-      -->
-      <xs:complexType name="users-type">
-       <xs:sequence>
-        <xs:element name="user" type="user-type"
-         minOccurs="0" maxOccurs="unbounded"/>
-        <xs:any namespace="##other" processContents="lax"
-         minOccurs="0" maxOccurs="unbounded"/>
-       </xs:sequence>
-       <xs:attribute name="state" type="state-type"
-        use="optional" default="full"/>
-       <xs:anyAttribute namespace="##other" processContents="lax"/>
-      </xs:complexType>
-      <!--
-         USER TYPE
-      -->
-      <xs:complexType name="user-type">
-       <xs:sequence>
-        <xs:element name="display-text" type="xs:string"
-         minOccurs="0"/>
-        <xs:element name="associated-aors" type="uris-type"
-         minOccurs="0"/>
-        <xs:element name="roles" type="user-roles-type"
-         minOccurs="0"/>
-        <xs:element name="languages" type="user-languages-type"
-         minOccurs="0"/>
-        <xs:element name="cascaded-focus" type="xs:anyURI"
-         minOccurs="0"/>
-        <xs:element name="endpoint" type="endpoint-type"
-         minOccurs="0" maxOccurs="unbounded"/>
-        <xs:any namespace="##other" processContents="lax"
-         minOccurs="0" maxOccurs="unbounded"/>
-       </xs:sequence>
-       <xs:attribute name="entity" type="xs:anyURI"/>
-       <xs:attribute name="state" type="state-type"
-        use="optional" default="full"/>
-       <xs:anyAttribute namespace="##other" processContents="lax"/>
-      </xs:complexType>
-      <!--
-         USER ROLES TYPE
-      -->
-      <xs:complexType name="user-roles-type">
-       <xs:sequence>
-        <xs:element name="entry" type="xs:string"
-         maxOccurs="unbounded"/>
-       </xs:sequence>
-       <xs:anyAttribute namespace="##other" processContents="lax"/>
-      </xs:complexType>
-      <!--
-         USER LANGUAGES TYPE
-      -->
-      <xs:simpleType name="user-languages-type">
-       <xs:list itemType="xs:language"/>
-      </xs:simpleType>
-      <!--
-         ENDPOINT TYPE
-      -->
-      <xs:complexType name="endpoint-type">
-       <xs:sequence>
-        <xs:element name="display-text" type="xs:string"
-         minOccurs="0"/>
-        <xs:element name="referred" type="execution-type"
-         minOccurs="0"/>
-        <xs:element name="status" type="endpoint-status-type"
-         minOccurs="0"/>
-        <xs:element name="joining-method" type="joining-type"
-         minOccurs="0"/>
-        <xs:element name="joining-info"
-         type="execution-type"
-         minOccurs="0"/>
-        <xs:element name="disconnection-method"
-         type="disconnection-type"
-         minOccurs="0"/>
-        <xs:element name="disconnection-info"
-         type="execution-type"
-         minOccurs="0"/>
-        <xs:element name="media" type="media-type"
-         minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element name="call-info" type="call-type"
-         minOccurs="0"/>
-        <xs:any namespace="##other" processContents="lax"
-         minOccurs="0" maxOccurs="unbounded"/>
-       </xs:sequence>
-       <xs:attribute name="entity" type="xs:string"/>
-       <xs:attribute name="state" type="state-type"
-        use="optional" default="full"/>
-       <xs:anyAttribute namespace="##other" processContents="lax"/>
-      </xs:complexType>
-      <!--
-         ENDPOINT STATUS TYPE
-      -->
-      <xs:simpleType name="endpoint-status-type">
-       <xs:restriction base="xs:string">
-        <xs:enumeration value="pending"/>
-        <xs:enumeration value="dialing-out"/>
-        <xs:enumeration value="dialing-in"/>
-        <xs:enumeration value="alerting"/>
-        <xs:enumeration value="on-hold"/>
-        <xs:enumeration value="connected"/>
-        <xs:enumeration value="muted-via-focus"/>
-        <xs:enumeration value="disconnecting"/>
-        <xs:enumeration value="disconnected"/>
-       </xs:restriction>
-      </xs:simpleType>
-      <!--
-         JOINING TYPE
-      -->
-      <xs:simpleType name="joining-type">
-       <xs:restriction base="xs:string">
-        <xs:enumeration value="dialed-in"/>
-        <xs:enumeration value="dialed-out"/>
-        <xs:enumeration value="focus-owner"/>
-       </xs:restriction>
-      </xs:simpleType>
-      <!--
-         DISCONNECTION TYPE
-      -->
-      <xs:simpleType name="disconnection-type">
-       <xs:restriction base="xs:string">
-        <xs:enumeration value="departed"/>
-        <xs:enumeration value="booted"/>
-        <xs:enumeration value="failed"/>
-        <xs:enumeration value="busy"/>
-       </xs:restriction>
-      </xs:simpleType>
-      <!--
-         EXECUTION TYPE
-      -->
-      <xs:complexType name="execution-type">
-       <xs:sequence>
-        <xs:element name="when" type="xs:dateTime"
-         minOccurs="0"/>
-        <xs:element name="reason" type="xs:string"
-         minOccurs="0"/>
-        <xs:element name="by" type="xs:anyURI"
-         minOccurs="0"/>
-       </xs:sequence>
-       <xs:anyAttribute namespace="##other" processContents="lax"/>
-      </xs:complexType>
-     <!--
-         CALL TYPE
-      -->
-      <xs:complexType name="call-type">
-       <xs:choice>
-        <xs:element name="sip" type="sip-dialog-id-type"/>
-        <xs:any namespace="##other" processContents="lax"
-         minOccurs="0" maxOccurs="unbounded"/>
-       </xs:choice>
-       <xs:anyAttribute namespace="##other" processContents="lax"/>
-      </xs:complexType>
-      <!--
-         SIP DIALOG ID TYPE
-      -->
-      <xs:complexType name="sip-dialog-id-type">
-       <xs:sequence>
-        <xs:element name="display-text" type="xs:string"
-         minOccurs="0"/>
-        <xs:element name="call-id" type="xs:string"/>
-        <xs:element name="from-tag" type="xs:string"/>
-        <xs:element name="to-tag" type="xs:string"/>
-        <xs:any namespace="##other" processContents="lax"
-         minOccurs="0" maxOccurs="unbounded"/>
-       </xs:sequence>
-       <xs:anyAttribute namespace="##other" processContents="lax"/>
-      </xs:complexType>
-      <!--
-         MEDIA TYPE
-      -->
-      <xs:complexType name="media-type">
-       <xs:sequence>
-        <xs:element name="display-text" type="xs:string"
-         minOccurs="0"/>
-        <xs:element name="type" type="xs:string"
-         minOccurs="0"/>
-        <xs:element name="label" type="xs:string"
-         minOccurs="0"/>
-        <xs:element name="src-id" type="xs:string"
-         minOccurs="0"/>
-        <xs:element name="status" type="media-status-type"
-         minOccurs="0"/>
-        <xs:any namespace="##other" processContents="lax"
-         minOccurs="0" maxOccurs="unbounded"/>
-       </xs:sequence>
-       <xs:attribute name="id" type="xs:string"
-        use="required"/>
-       <xs:anyAttribute namespace="##other" processContents="lax"/>
-      </xs:complexType>
-      <!--
-         MEDIA STATUS TYPE
-      -->
-      <xs:simpleType name="media-status-type">
-       <xs:restriction base="xs:string">
-        <xs:enumeration value="recvonly"/>
-        <xs:enumeration value="sendonly"/>
-        <xs:enumeration value="sendrecv"/>
-        <xs:enumeration value="inactive"/>
-       </xs:restriction>
-      </xs:simpleType>
-       <!--
-         SIDEBARS BY VAL TYPE
-       -->
-       <xs:complexType name="sidebars-by-val-type">
-        <xs:sequence>
-         <xs:element name="entry" type="conference-type"
-          minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>
-        <xs:attribute name="state" type="state-type"
-         use="optional" default="full"/>
-        <xs:anyAttribute namespace="##other" processContents="lax"/>
-       </xs:complexType>
-      </xs:schema>
-
-</xs:schema>
-    ]]></code>
-  </section2>
+    <p>PENDING</p>
 </section1>
 <section1 topic='Acknowledgements' anchor='acks'>
   <p>Jitsi's participation in this specification is funded by the NLnet

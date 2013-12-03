@@ -929,6 +929,13 @@ IANA Service Location Protocol, Version 2 (SLPv2) Templates</link></span> <note>
     <jid>tm@ayena.de</jid>
   </author>
 " >
+<!ENTITY fippo "
+  <author>
+    <firstname>Philipp</firstname>
+    <surname>Hancke</surname>
+    <jid>fippo@psyced.org</jid>
+  </author>
+" >
 
 <!-- XMPP Extension Protocols -->
 

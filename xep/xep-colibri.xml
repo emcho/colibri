@@ -50,8 +50,8 @@
     </revision>
     <revision>
       <version>0.0.2</version>
-      <date>2013-12-03</date>
-      <initials>ph</initials>
+      <date>2013-12-04</date>
+      <initials>ei/ph</initials>
       <remark>
         <p>Added usecases.</p>
       </remark>
@@ -516,8 +516,10 @@ SEND: <iq to='garden.montague.lit' from='romeo@montague.lit/orchard'
         </conference>
       </iq>
 ]]></example>
-      <p>Describe trickle ice?</p>
+<!--
+      <p>FIXME: Describe trickle ice?</p>
       <p>FIXME: ufrag/pwd missing? required?</p>
+      -->
       <example caption='Result'><![CDATA[
 RECV: <iq type='result' to='romeo@montague.lit/orchard' from='garden.montague.lit' id='1581'>
         <conference xmlns='http://jitsi.org/protocol/colibri' id='cafb6f2c8197818e'>
@@ -540,7 +542,7 @@ RECV: <iq type='result' to='romeo@montague.lit/orchard' from='garden.montague.li
       </iq>
 ]]></example>
       <p>Essentially that information is the transport description from
-        the bridge. Do we need that? FIXME
+        the bridge. <!-- Do we need that? FIXME -->
       </p>
     </section2>
     <section2 topic='Adding a new channel' anchor='usecases-addchannel'>

@@ -1,13 +1,17 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE xep SYSTEM 'xep.dtd' [
-  <!ENTITY % ents SYSTEM 'xep.ent'>
-%ents;
-]>
+        <!ENTITY % ents SYSTEM 'xep.ent'>
+        %ents;
+        ]>
 <?xml-stylesheet type='text/xsl' href='xep.xsl'?>
 <xep>
   <header>
     <title>COnferenceing with LIghtweight BRIdging (COLIBRI)</title>
-    <abstract> This specification defines an XMPP extension that allows real-time communications clients to discover and interact with conference bridges that provide conference mixing or relaying capabilities.</abstract>
+    <abstract>This specification defines an XMPP extension that allows
+      real-time communications clients to discover and interact with
+      conference bridges that provide conference mixing or relaying
+      capabilities.
+    </abstract>
     &LEGALNOTICE;
     <number>xxxx</number>
     <status>ProtoXEP</status>
@@ -17,8 +21,8 @@
     <dependencies>
       <spec>XEP-0167</spec>
     </dependencies>
-    <supersedes />
-    <supersededby />
+    <supersedes/>
+    <supersededby/>
     <shortname>colibri</shortname>
     <author>
       <firstname>Emil</firstname>
@@ -54,65 +58,185 @@
     </revision>
   </header>
   <section1 topic='Introduction' anchor='intro'>
-    <p>&xep0298; defines a way for XMPP agents to establish and participate in tightly coupled conference calls. Such conference calls would typically involve a number of regular participants that establish direct one-to-one sessions with a single entity, often referred to as a focus agent. Focus agents are generally responsible for making sure that media sent from one call participant would be distributed to all others so that everyone would effectively hear or see everyone else. In other words they often act as media mixers.</p>
+    <p>
+      &xep0298; defines a way for XMPP agents to establish and
+      participate in tightly coupled conference calls. Such conference
+      calls would typically involve a number of regular participants
+      that establish direct one-to-one sessions with a single entity,
+      often referred to as a focus agent. Focus agents are generally
+      responsible for making sure that media sent from one call
+      participant would be distributed to all others so that everyone
+      would effectively hear or see everyone else. In other words they
+      often act as media mixers.
+    </p>
 
-    <p>Depending on the mixing technology used by media mixers, they may require significant bandwidth, processing resources or both. It is hence common for mixers to be hosted on dedicated servers that can provide such resources. They are then made reachable as rendez-vous points and conference call participants are required to call in, in order to join a conference call. This requires a certain amount of pre-call configuration to be completed by the service maintainers in order to create conference rooms and grant proper access to the expected participants. The authorization credentials are then often relayed to the participants in preparation of the call by other means, such as IM or mail</p>
+    <p>
+      Depending on the mixing technology used by media mixers, they may
+      require significant bandwidth, processing resources or both. It is
+      hence common for mixers to be hosted on dedicated servers that can
+      provide such resources. They are then made reachable as
+      rendez-vous points and conference call participants are required
+      to call in, in order to join a conference call. This requires a
+      certain amount of pre-call configuration to be completed by the
+      service maintainers in order to create conference rooms and grant
+      proper access to the expected participants. The authorization
+      credentials are then often relayed to the participants in
+      preparation of the call by other means, such as IM or mail
+    </p>
 
-    <p>In certain situations, such pre-call preparations are inconvenient and it is important for users to be able to establish ad-hoc conference calls. One way to achieve this is for user agents themselves to act as focus agents and media mixers. Everyone else just calls the user at the focus agent, who then can decide whether to accept or reject the calls as they arrive. This works particularly well for audio only calls as the amount of bandwidth and processing resources that they require is generally within reach for end-user devices.</p>
+    <p>
+      In certain situations, such pre-call preparations are
+      inconvenient and it is important for users to be able to establish
+      ad-hoc conference calls. One way to achieve this is for user
+      agents themselves to act as focus agents and media mixers.
+      Everyone else just calls the user at the focus agent, who then can
+      decide whether to accept or reject the calls as they arrive. This
+      works particularly well for audio only calls as the amount of
+      bandwidth and processing resources that they require is generally
+      within reach for end-user devices.
+    </p>
 
-    <p>The situation is quite different for video calls. Media decoding and especially encoding require considerably more resources with video than they do with audio. Today, encoding a single video flow with an acceptable quality is often the maximum that can be expected from an end-user device. The advantages that come with Moore's law will likely be insufficient to improve this, given the massive shift toward mobile devices and the ever-increasing user expectations toward video quality.</p>
+    <p>
+      The situation is quite different for video calls. Media decoding
+      and especially encoding require considerably more resources with
+      video than they do with audio. Today, encoding a single video flow
+      with an acceptable quality is often the maximum that can be
+      expected from an end-user device. The advantages that come with
+      Moore's law will likely be insufficient to improve this, given the
+      massive shift toward mobile devices and the ever-increasing user
+      expectations toward video quality.
+    </p>
 
-    <p>Therefore, this specification (COLIBRI) aims to provide a means for user agents to interact with conference mixers. Such interaction allows user agents to allocate mixing channels, indicate what conferences they should be attached to, what integers the various payload types map to, etc. Using COLIBRI would hence allow any user agent to organize conference calls and act as a signalling focus by outsourcing the actual media mixing to a dedicated mixer.</p>
+    <p>
+      Therefore, this specification (COLIBRI) aims to provide a means
+      for user agents to interact with conference mixers. Such
+      interaction allows user agents to allocate mixing channels,
+      indicate what conferences they should be attached to, what
+      integers the various payload types map to, etc. Using COLIBRI
+      would hence allow any user agent to organize conference calls and
+      act as a signalling focus by outsourcing the actual media mixing
+      to a dedicated mixer.
+    </p>
 
   </section1>
   <section1 topic='Terminology' anchor='terms'>
-  <dl>
-    <di>
-      <dt>Focus or Focus Agent</dt>
-      <dd>The terms apply to XMPP agents that, in terms of signalling, stand at the center of a tightly-coupled conference call. In other words, all conference participants establish a &xep0166; session with and only with that agent. Focus Agents are not necessarily performing media mixing themselves. In fact, the very purpose of this specification is to provide them with a means of handling this elsewhere.</dd>
-    </di>
-    <di>
-      <dt>Mixer or Bridge</dt>
-      <dd>Throughout this document the term is used to depict an entity that is responsible for mixing and delivering to conference participants all media exchanged in a conference call. Mixers or bridges can provide their service by either performing Content Mixing, or RTP translation or both.</dd>
-    </di>
-    <di>
-      <dt>Content Mixing</dt>
-      <dd>The term refers to a kind of media processing where the content of multiple input RTP streams is "mixed" into a single output stream. In conference calls audio mixing implementations generally simply add and adjust all source audio streams to produce their single output stream. Video content mixing, on the other hand, is often implemented by creating composite images containing individual frames from the input streams. Another common implementation consists in producing an output that is identical to one of the input streams, often the one belonging to a currently active speaker.</dd>
-    </di>
-    <di>
-      <dt>RTP Translation</dt>
-      <dd><cite>RFC 3550</cite> defines a translator as "an intermediate system that forwards RTP packets with their synchronization source identifier intact." This specification respects that definition but it also uses "RTP Translation" in opposition with "Content Mixing". Conference bridges that perform RTP translation simply redirect each incoming RTP packet to all participants, often excluding the one where it came from. Contrary to content mixing, rtp translation generally requires less processing resources since it does not involve media manipulation. Bandwidth requirements on the other hand, could be significantly higher with  RTP translation than with content mixing.</dd>
-    </di>
-  </dl>
-</section1>
+    <dl>
+      <di>
+        <dt>
+          Focus or Focus Agent
+        </dt>
+        <dd>
+          The terms apply to XMPP agents that, in terms of signalling,
+          stand at the center of a tightly-coupled conference call. In
+          other words, all conference participants establish a &xep0166;
+          session with and only with that agent. Focus Agents are not
+          necessarily performing media mixing themselves. In fact, the
+          very purpose of this specification is to provide them with a
+          means of handling this elsewhere.
+        </dd>
+      </di>
+      <di>
+        <dt>
+          Mixer or Bridge
+        </dt>
+        <dd>
+          Throughout this document the term is used to depict an
+          entity that is responsible for mixing and delivering to
+          conference participants all media exchanged in a conference
+          call. Mixers or bridges can provide their service by either
+          performing Content Mixing, or RTP translation or both.
+        </dd>
+      </di>
+      <di>
+        <dt>
+          Content Mixing
+        </dt>
+        <dd>
+          The term refers to a kind of media processing where the
+          content of multiple input RTP streams is "mixed" into a single
+          output stream. In conference calls audio mixing
+          implementations generally simply add and adjust all source
+          audio streams to produce their single output stream. Video
+          content mixing, on the other hand, is often implemented by
+          creating composite images containing individual frames from
+          the input streams. Another common implementation consists in
+          producing an output that is identical to one of the input
+          streams, often the one belonging to a currently active
+          speaker.
+        </dd>
+      </di>
+      <di>
+        <dt>
+          RTP Translation
+        </dt>
+        <dd>
+          <cite>RFC 3550</cite> defines a translator as "an intermediate
+          system that forwards RTP packets with their synchronization
+          source identifier intact." This specification respects that
+          definition but it also uses "RTP Translation" in opposition
+          with "Content Mixing". Conference bridges that perform RTP
+          translation simply redirect each incoming RTP packet to all
+          participants, often excluding the one where it came from.
+          Contrary to content mixing, rtp translation generally requires
+          less processing resources since it does not involve media
+          manipulation. Bandwidth requirements on the other hand, could
+          be significantly higher with RTP translation than with content
+          mixing.
+        </dd>
+      </di>
+    </dl>
+  </section1>
   <section1 topic='Requirements' anchor='reqs'>
-    <p>The extension defined herein is designed to meet the following requirements:</p>
+    <p>
+      The extension defined herein is designed to meet the following
+      requirements:
+    </p>
     <ol>
-      <li>Provide a means for conference focus agents to interact with conference mixers in order to configure payload type mappings and allocate ports or other resources that they could then advertise in Jingle sessions so that all media would traverse the bridge.</li>
-      <li>Impose no COLIBRI specific requirements on non-focus participants so that any Jingle supporting client would be able to participate.</li>
+      <li>
+        Provide a means for conference focus agents to interact with
+        conference mixers in order to configure payload type mappings
+        and allocate ports or other resources that they could then
+        advertise in Jingle sessions so that all media would traverse
+        the bridge.
+      </li>
+      <li>Impose no COLIBRI specific requirements on non-focus
+        participants so that any Jingle supporting client would be able
+        to participate.
+      </li>
       <li>[TODO] Anything else?</li>
     </ol>
   </section1>
   <section1 topic='How It Works' anchor='howitworks'>
-    <p>This section provides a friendly introduction to COLIBRI.</p>
-    <p>In essence, the goal of COLIBRI is to provide focus agents with a way of using remote mixers as if as they were available locally. The most important part of that is the possibility to allocate ports on the mixer interfaces and then use these ports when establishing Jingle sessions with the various participants. </p>
-<!--
-discovery
-creating a conference call
-modifying a conference call
-defining payload types
-supports transcoding
-get supported formats
-Mixing vs. RTP translation
-RTP/RTCP channels
-RAW UDP
-ICE UDP
-ZRTP
-      composited / switched
--->
+    <p>
+      This section provides a friendly introduction to COLIBRI.
+    </p>
+    <p>
+      In essence, the goal of COLIBRI is to provide focus agents with a
+      way of using remote mixers as if as they were available locally.
+      The most important part of that is the possibility to allocate
+      ports on the mixer interfaces and then use these ports when
+      establishing Jingle sessions with the various participants.
+    </p>
+    <!--
+    discovery
+    creating a conference call
+    modifying a conference call
+    defining payload types
+    supports transcoding
+    get supported formats
+    Mixing vs. RTP translation
+    RTP/RTCP channels
+    RAW UDP
+    ICE UDP
+    ZRTP
+          composited / switched
+    -->
   </section1>
   <section1 topic='Use cases' anchor='usecases'>
     <section2 topic='Creating a conference' anchor='usecases-create'>
+      <p>
+
+      </p>
       <example caption='Creating a conference'><![CDATA[
 SEND: <iq from='romeo@montague.lit/orchard'
           id='zid615d9'
@@ -133,7 +257,10 @@ SEND: <iq from='romeo@montague.lit/orchard'
         </conference>  
       </iq>
 ]]></example>
-      <p>initiator: describes the ICE/DTLS roles of the bridge. initiator=true => bridge is ice-controlling / dtls-actpass, initator=false => bridge is ice-controlled / dtls-active</p>
+      <p>initiator: describes the ICE/DTLS roles of the bridge.
+        initiator=true => bridge is ice-controlling / dtls-actpass,
+        initator=false => bridge is ice-controlled / dtls-active
+      </p>
       <example caption='Result'><![CDATA[
 RECV: <iq type='result' to='romeo@montague.lit/orchard' from='garden.montague.lit' id='zid615d9'>
         <conference xmlns='http://jitsi.org/protocol/colibri' id='cafb6f2c8197818e'>
@@ -158,15 +285,20 @@ RECV: <iq type='result' to='romeo@montague.lit/orchard' from='garden.montague.li
       </iq>
 ]]></example>
       <p>note the conference id
-on each channel: 
-- id is assigned. 
-- the rtp-level-relay-type attribute, possible values are mixer and translator
-     for mixers, the mixed ssrc for that channel is included as SSMA attribute
-- initiator is echoed
-- expire describes how many seconds the bridge will keep the channel open without media activity</p>
+        on each channel:
+        - id is assigned.
+        - the rtp-level-relay-type attribute, possible values are mixer
+        and translator
+        for mixers, the mixed ssrc for that channel is included as SSMA
+        attribute
+        - initiator is echoed
+        - expire describes how many seconds the bridge will keep the
+        channel open without media activity
+      </p>
     </section2>
     <section2 topic='Updating payload information for a channel' anchor='usecases-update-payload'>
-      <example caption='Focus updates payload information for a channel'><![CDATA[
+      <example caption='Focus updates payload information for a channel'>
+        <![CDATA[
 SEND: <iq to='garden.montague.lit' from='romeo@montague.lit/orchard' type='set' id='744:sendIQ'>
         <conference xmlns='http://jitsi.org/protocol/colibri' id='cafb6f2c8197818e'>
           <content name='audio'>
@@ -262,7 +394,9 @@ RECV: <iq type='result' to='romeo@montague.lit/orchard' from='garden.montague.li
         </conference>
       </iq>
 ]]></example>
-      <p>Essentially that information is the transport description from the bridge. Do we need that?</p>
+      <p>Essentially that information is the transport description from
+        the bridge. Do we need that?
+      </p>
     </section2>
     <section2 topic='Adding a new channel' anchor='usecases-addchannel'>
       <example caption='Adding a new channel'><![CDATA[
@@ -305,12 +439,17 @@ RECV: <iq type='result' to='romeo@montague.lit/orchard' from='garden.montague.li
     </section2>
   </section1>
   <section1 topic='Use with Jingle'>
-    <p>FIXME: Non-normative section showing how to use this with Jingle.</p>
+    <p>FIXME: Non-normative section showing how to use this with
+      Jingle.
+    </p>
   </section1>
   <section1 topic='Determining Support' anchor='support'>
-    <p>If an entity supports COLIBRI, it SHOULD advertise that fact by returning
-    a feature of "http://jitsi.org/protocol/colibri" in response to a &xep0030;
-    information request.</p>
+    <p>If an entity supports COLIBRI, it SHOULD advertise that fact by
+      returning
+      a feature of "http://jitsi.org/protocol/colibri" in response to
+      a &xep0030;
+      information request.
+    </p>
     <example caption="Service Discovery Information Request"><![CDATA[
 <iq from='kingclaudius@shakespeare.lit/castle'
     id='ku6e51v3'
@@ -329,11 +468,16 @@ RECV: <iq type='result' to='romeo@montague.lit/orchard' from='garden.montague.li
   </query>
 </iq>
     ]]></example>
-    <p>In order for an application to determine whether an entity supports this
-    protocol, where possible it SHOULD use the dynamic, presence-based profile
-    of service discovery defined in &xep0115;. However, if an application has
-    not received entity capabilities information from an entity, it SHOULD use
-    explicit service discovery instead.</p>
+    <p>In order for an application to determine whether an entity
+      supports this
+      protocol, where possible it SHOULD use the dynamic, presence-based
+      profile
+      of service discovery defined in &xep0115;. However, if an
+      application has
+      not received entity capabilities information from an entity, it
+      SHOULD use
+      explicit service discovery instead.
+    </p>
   </section1>
   <section1 topic='Security Considerations' anchor='security'>
     <p>PENDING</p>
@@ -343,9 +487,11 @@ RECV: <iq type='result' to='romeo@montague.lit/orchard' from='garden.montague.li
   </section1>
   <section1 topic='XML Schemas' anchor='schema'>
     <p>PENDING</p>
-</section1>
-<section1 topic='Acknowledgements' anchor='acks'>
-  <p>Jitsi's participation in this specification is funded by the NLnet
-   Foundation.</p>
-</section1>
+  </section1>
+  <section1 topic='Acknowledgements' anchor='acks'>
+    <p>Jitsi's participation in this specification is funded by the
+      NLnet
+      Foundation.
+    </p>
+  </section1>
 </xep>

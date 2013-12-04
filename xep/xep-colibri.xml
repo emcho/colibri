@@ -236,6 +236,23 @@
       streams in both directions in cases where one bridge is connected
       to another.
     </p>
+    <p>
+      Typically channels would be created by the entity controlling a
+      conference call. This could either be a conferencing server or a
+      smart client capable of handling conferences. We would refer to
+      both of these as the "focus". In either case, the important part
+      is that the focus terminates all signalling. It is a signalling
+      endpoint and it is responsible for all aspects of call signalling
+      including offer/answer.
+    </p>
+    <p>
+      In other words, when setting up a conference, a focus would first
+      allocate the necessary channels, then directly initiate sessions
+      (invite) other participants into the call. Only, when sending the
+      invitations to these participants, the focus would use the
+      transport information (addresses and ports) that it would have
+      received from the COLIBRI bridge, rather than its own.
+    </p>
     <!--
     discovery
     creating a conference call
@@ -255,7 +272,17 @@
     <section2 topic='Creating a conference' anchor='usecases-create'>
       <p>
         The most important thing about setting up a conference is the
-        creation of channels for every participant.
+        creation of channels for every participant. Conference setup is
+        not the only chance an organiser gets to declare all
+        participants but typically when a conference call is setup it
+        is because there are at least some number of known participants
+        and there would be no point in delaying channel creation for
+        them.
+      </p>
+      <p>
+        The following example shows how Romeo creates an audio/video
+        conference at a bridge, requesting that three participant
+        channels be created.
       </p>
       <example caption='Creating a conference'><![CDATA[
 SEND: <iq from='romeo@montague.lit/orchard'
@@ -272,14 +299,35 @@ SEND: <iq from='romeo@montague.lit/orchard'
             <channel initiator='true'/>
           </content>
           <content name='video'>
+            <channel initiator='true'/>
             ...
+            <channel initiator='true'/>
           </content>
         </conference>  
       </iq>
 ]]></example>
-      <p>initiator: describes the ICE/DTLS roles of the bridge.
-        initiator=true => bridge is ice-controlling / dtls-actpass,
-        initator=false => bridge is ice-controlled / dtls-active
+      <p>
+        Notice how the 'initiator' channel above is set to true. The
+        setting determines ICE and DTLS/SRTP behaviour for the bridge.
+        In this specific case, 'initiator' being set to 'true' Romeo is
+        requesting that the bridge behave as the initiator of the
+        session which means that it would try to be the controlling ICE
+        agent and also assume the 'dtls-actpass' role for DTLS/SRTP
+        negotiation. A value of 'false' would have meant that the bridge
+        would behave as the controlled ICE agent and assume the
+        'dtls-active' role.
+      </p>
+      <p>
+        When sending its result back, the bridge confirms creation of
+        the requested channels and it also delivers transport
+        information that would be necessary for participants to
+        transport media to the bridge. These would most often include
+        ICE candidates, ufrag and pwd parameters, and DTLS fingerprints.
+      </p>
+      <p>
+        Note that ICE is not mandatory for use and COLIBRI bridges can
+        just as well perform Hosted NAT Traversal using latching and a
+        RAW-UDP transport.
       </p>
       <example caption='Result'><![CDATA[
 RECV: <iq type='result' to='romeo@montague.lit/orchard' from='garden.montague.lit' id='zid615d9'>
@@ -304,14 +352,39 @@ RECV: <iq type='result' to='romeo@montague.lit/orchard' from='garden.montague.li
         </conference>
       </iq>
 ]]></example>
-      <p>note the conference id
-        on each channel:
-        - id is assigned.
-        - the rtp-level-relay-type attribute, possible values are mixer
-        and translator
-        for mixers, the mixed ssrc for that channel is included as SSMA
+      <p>
+        The above "result" also contains the following elements of
+        interest for every channel:
+      </p>
+      <p>
+        - an ID that is necessary for any further modification from that
+        the focus wants to set on a channel. [FIXME: clients should be
+        able to specify these id-s so as not to rely on ordering to
+        identify channels and get complexes thinking they are SDP
+        parsers]
+      </p>
+      <p>
+        - an rtp-level-relay-type attribute with possible values of
+        'mixer' and 'translator' indicating how the bridge is going to
+        deliver data on a specific channel [FIXME: this would definitely
+        need to be specifiable from the client].
+      </p>
+      <p>
+        - mixer channels would also include ssrc-s for that channels in
+        question. This is particularly necessary when SSRC-s need to be
+        announced to participants (because people never learned how RTP
+        works and are afraid from anything that wasn't explicitly
+        announced with an Offer/Answer exchange). Generally such
+        announcements would be possible by simply propagating SSRCs that
+        other participants announce. In a mixed flow however the SSRC
+        would belong to the mixer (or COLIBRI bridge) so it would need
+        to be known in advance.
         attribute
-        - initiator is echoed
+      </p>
+      <p>
+        - the initiator value is echoed
+      </p>
+      <p>
         - expire describes how many seconds the bridge will keep the
         channel open without media activity
       </p>

@@ -6,7 +6,7 @@
 <?xml-stylesheet type='text/xsl' href='xep.xsl'?>
 <xep>
   <header>
-    <title>COnferenceing with LIghtweight BRIdging (COLIBRI)</title>
+    <title>COnferences with LIghtweight BRIdging (COLIBRI)</title>
     <abstract>This specification defines an XMPP extension that allows
       real-time communications clients to discover and interact with
       conference bridges that provide conference mixing or relaying
@@ -217,6 +217,25 @@
       ports on the mixer interfaces and then use these ports when
       establishing Jingle sessions with the various participants.
     </p>
+    <p>
+      Every participant in the conference call is assigned one port for
+      RTP data and one for RTCP. An RTP/RTCP port couple is called a
+      channel. Each participant would use one channel per media type.
+      That is, a client participating with audio only would get one
+      channel, while another one that joins with both audio and video
+      would get two: one for audio and one for video.
+    </p>
+    <p>
+      Channels are used for streams from the bridge to participants and
+      from participants to the bridge. Typically a channel would contain
+      one stream from a participant to a bridge, for example their
+      webcam or desktop, and one or more streams in the opposite
+      direction (e.g. webcam or desktop streams from other participants
+      to the one using this channel). This is not a requirement though
+      and a channel can certainly be used for transportation of multiple
+      streams in both directions in cases where one bridge is connected
+      to another.
+    </p>
     <!--
     discovery
     creating a conference call
@@ -235,7 +254,8 @@
   <section1 topic='Use cases' anchor='usecases'>
     <section2 topic='Creating a conference' anchor='usecases-create'>
       <p>
-
+        The most important thing about setting up a conference is the
+        creation of channels for every participant.
       </p>
       <example caption='Creating a conference'><![CDATA[
 SEND: <iq from='romeo@montague.lit/orchard'

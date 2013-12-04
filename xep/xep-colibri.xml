@@ -390,6 +390,27 @@ RECV: <iq type='result' to='romeo@montague.lit/orchard' from='garden.montague.li
       </p>
     </section2>
     <section2 topic='Updating payload information for a channel' anchor='usecases-update-payload'>
+      <p>
+        Channel updates can happen for various reasons. The following
+        examples illustrate two of them:
+      </p>
+      <p>
+        - specifying payload types. While payload types in RTP are
+        sometimes static (e.g. for older codecs such as G.711), this is
+        not always the case for more recent types, which need to be
+        assigned dynamically during session establishment. The tricky
+        part here is that dynamic means dynamic so every participant in
+        a conference call may end up expecting different payload types.
+        As a result, a COLIBRI bridge SHOULD know about everyone's
+        expectations, which is why channels are updated with payload
+        types. Note that if a bridge does see unknown payload types it
+        MUST still relay them to other participants as they might have
+        used some other mechanism to make sure they know what they
+        mean.
+      </p>
+      <p>
+        - DTLS/SRTP fingerprints.
+      </p>
       <example caption='Focus updates payload information for a channel'>
         <![CDATA[
 SEND: <iq to='garden.montague.lit' from='romeo@montague.lit/orchard' type='set' id='744:sendIQ'>
@@ -417,38 +438,43 @@ SEND: <iq to='garden.montague.lit' from='romeo@montague.lit/orchard' type='set' 
         </conference>
       </iq>
 ]]></example>
+      <p>
+        Note that while the result in this case is essentially an
+        acknowledgement, it still carries a full representation of the
+        bridge.
+      </p>
       <example caption='Result'><![CDATA[
-RECV: <iq type='result' to='romeo@montague.lit/orchard' from='garden.montague.lit' id='744:sendIQ'>
+    RECV: <iq type='result' to='romeo@montague.lit/orchard' from='garden.montague.lit' id='744:sendIQ'>
         <conference xmlns='http://jitsi.org/protocol/colibri' id='cafb6f2c8197818e'>
           <content name='audio'>
             <channel rtp-level-relay-type='mixer' direction='recvonly' initiator='true' id='c6a142b7cf728fd0' expire='60'>
               <transport xmlns='urn:xmpp:jingle:transports:ice-udp:1' pwd='5d0mj' ufrag='amiq'>
-                <fingerprint xmlns='urn:xmpp:jingle:apps:dtls:0' hash='sha-1'>99:E0:34:9B:6E:34:64:FD:42:F9:8D:FD:5F:EA:EE:26:D9:23:1B:F6</fingerprint>
+                <fingerprint xmlns='urn:xmpp:jingle:apps:dtls:0' hash='sha-1'>99:...:F6</fingerprint>
                 <candidate type='host' protocol='udp' id='ca' ip='176.31.40.80' component='1' port='5144' foundation='3' generation='0' priority='2113932031' network='0'/>
                 <candidate type='host' protocol='udp' id='ga' ip='176.31.40.80' component='2' port='5145' foundation='3' generation='0' priority='2113932030' network='0'/>
               </transport>
             </channel>
             <channel rtp-level-relay-type='mixer' direction='recvonly' initiator='true' id='f2b32e1ed48d74d4' expire='60'>
               <transport xmlns='urn:xmpp:jingle:transports:ice-udp:1' pwd='7kg3ur8k3r270v554ajkkj2d0e' ufrag='43hh7'>
-                <fingerprint xmlns='urn:xmpp:jingle:apps:dtls:0' hash='sha-1'>65:BC:07:C9:67:7A:F2:CF:C2:92:30:D1:B8:98:5A:C2:C1:76:6E:6D</fingerprint>
-                <candidate type='host' protocol='udp' id='cafb6f2c8197818e72f69182f2b32e1ed48d74d41971d4070502c500d' ip='176.31.40.80' component='1' port='5146' foundation='3' generation='0' priority='2113932031' network='0'/>
-                <candidate type='host' protocol='udp' id='cafb6f2c8197818e72f69182f2b32e1ed48d74d41971d40701137dead' ip='176.31.40.80' component='2' port='5147' foundation='3' generation='0' priority='2113932030' network='0'/>
+                <fingerprint xmlns='urn:xmpp:jingle:apps:dtls:0' hash='sha-1'>65:...:6D</fingerprint>
+                <candidate type='host' protocol='udp' id='1' ip='176.31.40.80' component='1' port='5146' foundation='3' generation='0' priority='2113932031' network='0'/>
+                <candidate type='host' protocol='udp' id='2' ip='176.31.40.80' component='2' port='5147' foundation='3' generation='0' priority='2113932030' network='0'/>
               </transport>
             </channel>
           </content>
           <content name='video'>
             <channel rtp-level-relay-type='translator' initiator='true' id='c9726594ccb4ede7' expire='60'>
               <transport xmlns='urn:xmpp:jingle:transports:ice-udp:1' pwd='57vomr1ckf3uen44m7a2lb8qjm' ufrag='44cev'>
-                <fingerprint xmlns='urn:xmpp:jingle:apps:dtls:0' hash='sha-1'>C6:F3:98:43:5A:3D:02:62:F8:68:F5:21:5F:42:E0:E8:CC:FE:71:CC</fingerprint>
-                <candidate type='host' protocol='udp' id='cafb6f2c8197818e2ab80ce5c9726594ccb4ede71956a44c0364dabbb' ip='176.31.40.80' component='1' port='5148' foundation='3' generation='0' priority='2113932031' network='0'/>
-                <candidate type='host' protocol='udp' id='cafb6f2c8197818e2ab80ce5c9726594ccb4ede71956a44c042ed62af' ip='176.31.40.80' component='2' port='5149' foundation='3' generation='0' priority='2113932030' network='0'/>
+                <fingerprint xmlns='urn:xmpp:jingle:apps:dtls:0' hash='sha-1'>C6:...:CC</fingerprint>
+                <candidate type='host' protocol='udp' id='1' ip='176.31.40.80' component='1' port='5148' foundation='3' generation='0' priority='2113932031' network='0'/>
+                <candidate type='host' protocol='udp' id='2' ip='176.31.40.80' component='2' port='5149' foundation='3' generation='0' priority='2113932030' network='0'/>
               </transport>
             </channel>
             <channel rtp-level-relay-type='translator' initiator='true' id='793f95d383b8f01' expire='60'>
               <transport xmlns='urn:xmpp:jingle:transports:ice-udp:1' pwd='5sru9g08hs17gfedd12npgm7pk' ufrag='tfa4'>
-                <fingerprint xmlns='urn:xmpp:jingle:apps:dtls:0' hash='sha-1'>F7:28:66:C5:A5:13:CE:E6:29:84:6B:22:36:47:02:50:7E:B3:AB:DB</fingerprint>
-                <candidate type='host' protocol='udp' id='cafb6f2c8197818e2ab80ce5793f95d383b8f017ac41a30066e5b079' ip='176.31.40.80' component='1' port='5150' foundation='3' generation='0' priority='2113932031' network='0'/>
-                <candidate type='host' protocol='udp' id='cafb6f2c8197818e2ab80ce5793f95d383b8f017ac41a3005f82ce41' ip='176.31.40.80' component='2' port='5151' foundation='3' generation='0' priority='2113932030' network='0'/>
+                <fingerprint xmlns='urn:xmpp:jingle:apps:dtls:0' hash='sha-1'>F7:...:DB</fingerprint>
+                <candidate type='host' protocol='udp' id='1' ip='176.31.40.80' component='1' port='5150' foundation='3' generation='0' priority='2113932031' network='0'/>
+                <candidate type='host' protocol='udp' id='2' ip='176.31.40.80' component='2' port='5151' foundation='3' generation='0' priority='2113932030' network='0'/>
               </transport>
             </channel>
           </content>
@@ -478,9 +504,9 @@ RECV: <iq type='result' to='romeo@montague.lit/orchard' from='garden.montague.li
           <content name='audio'>
             <channel rtp-level-relay-type='translator' initiator='true' id='c6a142b7cf728fd0' expire='60'>
               <transport xmlns='urn:xmpp:jingle:transports:ice-udp:1' pwd='5d0mja27fgl83r9tsl1b9gkk4f' ufrag='amiqp'>
-                <fingerprint xmlns='urn:xmpp:jingle:apps:dtls:0' hash='sha-1'>99:E0:34:9B:6E:34:64:FD:42:F9:8D:FD:5F:EA:EE:26:D9:23:1B:F6</fingerprint>
-                <candidate type='host' protocol='udp' id='cafb6f2c8197818e72f69182c6a142b7cf728fd019cb28c5074ea4cd9' ip='176.31.40.80' component='1' port='5144' foundation='3' generation='0' priority='2113932031' network='0'/>
-                <candidate type='host' protocol='udp' id='cafb6f2c8197818e72f69182c6a142b7cf728fd019cb28c502db36e6f' ip='176.31.40.80' component='2' port='5145' foundation='3' generation='0' priority='2113932030' network='0'/>
+                <fingerprint xmlns='urn:xmpp:jingle:apps:dtls:0' hash='sha-1'>99:..:F6</fingerprint>
+                <candidate type='host' protocol='udp' id='1' ip='176.31.40.80' component='1' port='5144' foundation='3' generation='0' priority='2113932031' network='0'/>
+                <candidate type='host' protocol='udp' id='2' ip='176.31.40.80' component='2' port='5145' foundation='3' generation='0' priority='2113932030' network='0'/>
               </transport>
             </channel>
           </content>
@@ -492,6 +518,14 @@ RECV: <iq type='result' to='romeo@montague.lit/orchard' from='garden.montague.li
       </p>
     </section2>
     <section2 topic='Adding a new channel' anchor='usecases-addchannel'>
+      <p>
+        ICE candidates are another reason why a focus might want to
+        update a channel. Earlier examples indicated how conference
+        setup could be completed without providing any transport
+        information whatsoever. Whenever that is the case, such
+        information would need to be provided through channel
+        modification.
+      </p>
       <example caption='Adding a new channel'><![CDATA[
 SEND: <iq to='garden.montague.lit' from='romeo@montague.lit/orchard' type='get' id='2447:sendIQ'>
         <conference xmlns='http://jitsi.org/protocol/colibri' id='cafb6f2c8197818e'>
@@ -511,18 +545,18 @@ RECV: <iq type='result' to='romeo@montague.lit/orchard' from='garden.montague.li
             <channel rtp-level-relay-type='mixer' direction='recvonly' initiator='true' id='e97d7f794fbed74b' expire='60'>
               <source xmlns='urn:xmpp:jingle:apps:rtp:ssma:0' ssrc='2579640556'/>
               <transport xmlns='urn:xmpp:jingle:transports:ice-udp:1' pwd='75e88spurhqbih628ord5a3l9b' ufrag='6c7a6'>
-                <fingerprint xmlns='urn:xmpp:jingle:apps:dtls:0' hash='sha-1'>A9:BC:4F:4D:B3:FA:F6:A8:98:FB:A4:F7:16:FF:5B:36:D9:74:4B:2F</fingerprint>
-                <candidate type='host' protocol='udp' id='49a91b4f6694bc6a5be2753ee97d7f794fbed74b3c49bbe905dda444' ip='176.31.40.80' component='1' port='5168' foundation='3' generation='0' priority='2113932031' network='0'/>
-                <candidate type='host' protocol='udp' id='49a91b4f6694bc6a5be2753ee97d7f794fbed74b3c49bbe90544893a3' ip='176.31.40.80' component='2' port='5169' foundation='3' generation='0' priority='2113932030' network='0'/>
+                <fingerprint xmlns='urn:xmpp:jingle:apps:dtls:0' hash='sha-1'>A9:...:2F</fingerprint>
+                <candidate type='host' protocol='udp' id='1' ip='176.31.40.80' component='1' port='5168' foundation='3' generation='0' priority='2113932031' network='0'/>
+                <candidate type='host' protocol='udp' id='2' ip='176.31.40.80' component='2' port='5169' foundation='3' generation='0' priority='2113932030' network='0'/>
               </transport>
             </channel>
           </content>
           <content name='video'>
             <channel rtp-level-relay-type='translator' initiator='true' id='b4557f274216f99a' expire='60'>
               <transport xmlns='urn:xmpp:jingle:transports:ice-udp:1' pwd='1oriuuhjfq6884ln9d3g1rjq13' ufrag='3gh3o'>
-                <fingerprint xmlns='urn:xmpp:jingle:apps:dtls:0' hash='sha-1'>D7:98:46:CC:10:B5:3F:94:51:1A:95:59:87:7C:F5:EA:16:DA:71:C2</fingerprint>
-                <candidate type='host' protocol='udp' id='49a91b4f6694bc6a505863d7b4557f274216f99a3438631304066f88b' ip='176.31.40.80' component='1' port='5170' foundation='3' generation='0' priority='2113932031' network='0'/>
-                <candidate type='host' protocol='udp' id='49a91b4f6694bc6a505863d7b4557f274216f99a343863130424cb66a' ip='176.31.40.80' component='2' port='5171' foundation='3' generation='0' priority='2113932030' network='0'/>
+                <fingerprint xmlns='urn:xmpp:jingle:apps:dtls:0' hash='sha-1'>D7:...:C2</fingerprint>
+                <candidate type='host' protocol='udp' id='1' ip='176.31.40.80' component='1' port='5170' foundation='3' generation='0' priority='2113932031' network='0'/>
+                <candidate type='host' protocol='udp' id='2' ip='176.31.40.80' component='2' port='5171' foundation='3' generation='0' priority='2113932030' network='0'/>
               </transport>
             </channel>
           </content>

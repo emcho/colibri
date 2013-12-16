@@ -556,10 +556,10 @@
       <example caption='Adding a new channel'><![CDATA[
 <iq to='garden.montague.lit' from='romeo@montague.lit/orchard' type='get' id='247'>
   <conference xmlns='http://jitsi.org/protocol/colibri' id='cafb6f2c8197818e'>
-    <content creator='initiator' name='audio'>
+    <content name='audio'>
       <channel initiator='true'/>
     </content>
-    <content creator='initiator' name='video'>
+    <content name='video'>
       <channel initiator='true'/>
     </content>
   </conference>
@@ -602,6 +602,26 @@
               network='0'/>
         </transport>
       </channel>
+    </content>
+  </conference>
+</iq>
+]]></example>
+    </section2>
+    <section2 topic='Removing a channel' anchor='usecases-removechannel'>
+      <p>
+        The focus may remove a channel for a number of reason, e.g. when a participant hangs up.
+        It should then explicitly remove the channel instead of relying on the expiration mechanism
+        to close the channel. This is done by updating the channel information and setting the
+        'expire' attribute to '0' as shown below:
+      </p>
+      <example caption='Removing a channel'><![CDATA[
+<iq to='garden.montague.lit' from='romeo@montague.lit/orchard' type='get' id='249'>
+  <conference xmlns='http://jitsi.org/protocol/colibri' id='cafb6f2c8197818e'>
+    <content name='audio'>
+      <channel id='e97d7f794fbed74b' expire='0'/>
+    </content>
+    <content name='video'>
+      <channel id='b4557f274216f99a' expire='0'/>
     </content>
   </conference>
 </iq>
